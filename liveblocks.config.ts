@@ -14,6 +14,7 @@ declare global {
       // Example, real-time cursor coordinates
       cursor: { x: number; y: number } | null;
       message: string | null;
+      cursorColor: string | null;
     };
 
     // The Storage tree for the room, for useMutation, useStorage, etc.
