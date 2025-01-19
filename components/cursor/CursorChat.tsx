@@ -4,28 +4,57 @@ import { CursorChatProps, CursorMode } from '@/types/type'
 
 const CursorChat = ({ cursor, cursorState, setCursorState, updateMyPresence }: CursorChatProps) => {
 
+    // const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //     updateMyPresence({ message: e.target.value });
+    //     setCursorState({
+    //         mode: CursorMode.Chat,
+    //         previousMessage: null,
+    //         message: e.target.value,
+    //     })
+    // }
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        updateMyPresence({ message: e.target.value });
-        setCursorState({
-            mode: CursorMode.Chat,
-            previousMessage: null,
-            message: e.target.value,
-        })
-    }
+        if (cursorState.mode === CursorMode.Chat) {
+            updateMyPresence({ message: e.target.value });
+            setCursorState({
+                ...cursorState, // Spread the current state to preserve other properties
+                message: e.target.value,
+            });
+        }
+    };
+
+
+    // const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    //     if (e.key === 'Enter') {
+    //         setCursorState({
+    //             mode: CursorMode.Chat,
+    //             previousMessage: cursorState.message,
+    //             message: '',
+    //         })
+    //     } else if (e.key === 'Escape') {
+    //         setCursorState({
+    //             mode: CursorMode.Hidden,
+    //         })
+    //     }
+    // }
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Enter') {
-            setCursorState({
-                mode: CursorMode.Chat,
-                previousMessage: cursorState.message,
-                message: '',
-            })
-        } else if (e.key === 'Escape') {
-            setCursorState({
-                mode: CursorMode.Hidden,
-            })
+        if (cursorState.mode === CursorMode.Chat) {
+            if (e.key === 'Enter') {
+                setCursorState({
+                    ...cursorState,
+                    previousMessage: cursorState.message,
+                    message: '',
+                });
+            }
         }
-    }
+
+        if (e.key === 'Escape') {
+            setCursorState({
+                mode: CursorMode.Hidden, // No `message` needed for Hidden mode
+            });
+        }
+    };
 
     return (
         <div className='absolute top-0 left-0' style={{
